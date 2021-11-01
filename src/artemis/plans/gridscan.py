@@ -1,6 +1,6 @@
-from artemis.devices.eiger import Eiger
-from artemis.devices.zebra import Zebra
-from artemis.devices.fast_grid_scan import FastGridScan
+from src.artemis.devices.eiger import Eiger
+from src.artemis.devices.zebra import Zebra
+from src.artemis.devices.fast_grid_scan import FastGridScan
 from bluesky.preprocessors import stage_decorator
 from ophyd.sim import motor, motor1, motor2, det
 

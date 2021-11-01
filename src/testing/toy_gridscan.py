@@ -1,5 +1,5 @@
 from bluesky import RunEngine
-from artemis.api import run_gridscan
+from src.artemis.api import run_gridscan
 
 def run_toy_gridscan():
     RE = RunEngine()
