@@ -13,8 +13,8 @@ def gridscan(grid_scan_parameters):
 
     @stage_decorator([eiger, zebra])
     def run():
-        print("triggering gridscan")
         yield from fast_grid_scan.configure(grid_scan_parameters)
+        print("Triggering gridscan")
         fast_grid_scan.kickoff()
         fast_grid_scan.complete()
 
