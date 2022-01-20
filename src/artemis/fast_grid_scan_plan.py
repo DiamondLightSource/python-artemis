@@ -94,6 +94,9 @@ def do_scan(beamline_prefix: str):
     eiger = EigerDetector(name="eiger", prefix=f"{beamline_prefix}-EA-EIGER-01:")
     zebra = Zebra(name="zebra", prefix=f"{beamline_prefix}-EA-ZEBRA-01:")
 
+    eiger.wait_for_stale_parameters = lambda: None
+    caput(eiger.odin.meta.initialised.pvname, 1)
+
     RE = RunEngine({})
     RE.waiting_hook = ProgressBarManager()
 

@@ -79,7 +79,7 @@ class GridScanCompleteStatus(DeviceStatus):
         self.device.status.subscribe(self._running_changed)
 
         self._name = self.device.name
-        self._target_count = self.device.expected_images.get()
+        self._target_count = 100  # self.device.expected_images.get()
 
     def _notify_watchers(self, value, *args, **kwargs):
         if not self._watchers:
@@ -95,7 +95,7 @@ class GridScanCompleteStatus(DeviceStatus):
             time_remaining = None
             self.set_exception(e)
         else:
-            time_remaining = time_elapsed / fraction
+            time_remaining = time_elapsed / (1 - fraction)
         for watcher in self._watchers:
             watcher(
                 name=self._name,

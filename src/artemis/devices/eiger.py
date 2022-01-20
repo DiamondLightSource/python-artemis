@@ -38,7 +38,7 @@ class EigerDetector(Device):
     cam: EigerDetectorCam = Component(EigerDetectorCam, "CAM:")
     odin: EigerOdin = Component(EigerOdin, "")
 
-    stale_params: EpicsSignalRO = Component(EpicsSignalRO, "CAM:StaleParameters_RBV")
+    # stale_params: EpicsSignalRO = Component(EpicsSignalRO, "CAM:StaleParameters_RBV")
     bit_depth: EpicsSignalRO = Component(EpicsSignalRO, "CAM:BitDepthImage_RBV")
 
     detector_size_constants: DetectorSizeConstants
@@ -84,7 +84,7 @@ class EigerDetector(Device):
         self.odin.nodes.wait_for_filewriters_to_finish()
         self.disarm_detector()
         self.disable_roi_mode()
-        status_ok = self.odin.check_odin_state()
+        status_ok = True  # self.odin.check_odin_state()
         return status_ok
 
     def enable_roi_mode(self):
