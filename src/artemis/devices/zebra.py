@@ -33,9 +33,9 @@ PULSE1 = 52
 SOFT_IN3 = 62
 
 # Instrument specific
-TTL_DETECTOR = 2
+TTL_DETECTOR = 1
 TTL_XSPRESS3 = 3
-TTL_SHUTTER = 4
+TTL_SHUTTER = 2
 
 
 class PositionCompare(Device):
@@ -95,8 +95,8 @@ class ZebraOutputPanel(Device):
         return [None, self.out_1, self.out_2, self.out_3, self.out_4]
 
     def setup_fast_grid_scan(self):
-        self.out_pvs[TTL_DETECTOR].put(AND3)
-        self.out_pvs[TTL_SHUTTER].put(AND4)
+        self.out_pvs[TTL_DETECTOR].put(7)
+        self.out_pvs[TTL_SHUTTER].put(10)
         self.out_pvs[TTL_XSPRESS3].put(DISCONNECT)
         self.pulse_1_input.put(DISCONNECT)
 

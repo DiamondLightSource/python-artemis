@@ -42,25 +42,25 @@ config_ophyd_logging(file="/tmp/ophyd.log", level="DEBUG")
 DETECTOR = EIGER2_X_16M_SIZE
 USE_ROI = False
 GRID_SCAN_PARAMS = GridScanParams(
-    x_steps=5,
-    y_steps=10,
-    x_step_size=0.1,
-    y_step_size=0.1,
-    dwell_time=0.2,
-    x_start=0.0,
-    y1_start=0.0,
-    z1_start=0.0,
+    x_steps=13,
+    y_steps=12,
+    x_step_size=0.02,
+    y_step_size=0.02,
+    dwell_time=4,
+    x_start=0.052,
+    y1_start=0.472,
+    z1_start=-0.657,
 )
 DETECTOR_PARAMS = DetectorParams(
-    current_energy=100,
-    exposure_time=0.1,
-    acquisition_id="test",
-    directory="/tmp",
-    prefix="file.h5",
-    detector_distance=100.0,
-    omega_start=0.0,
-    omega_increment=0.1,
-    num_images=10,
+    current_energy=12700,
+    exposure_time=0.004,
+    acquisition_id="7407948",
+    directory="/dls/i03/data/2022/cm31105-1/20220121/protk_12/",
+    prefix="protk_12_3",
+    detector_distance=293.353,
+    omega_start=120.0,
+    omega_increment=0.0,
+    num_images=156,
 )
 DET_TO_DIST_CONVERTER = DetectorDistanceToBeamXYConverter(
     os.path.join(
