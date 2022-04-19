@@ -100,7 +100,7 @@ class StoreInIspyb:
         params["detector_distance"] = self.detector_params.detector_distance
         params["exp_time"] = self.detector_params.exposure_time
         params["imgdir"] = self.detector_params.directory
-        params["imgprefix"] = self.detector_params.prefix
+        params["imgprefix"] = self.detector_params.prefix.split("_")[0]
         params["imgsuffix"] = EIGER_FILE_SUFFIX
         params["n_images"] = self.detector_params.num_images
 
@@ -125,9 +125,7 @@ class StoreInIspyb:
         params["starttime"] = self.get_current_time_string()
 
         # temporary file template until nxs filewriting is integrated and we can use that file name
-        params[
-            "file_template"
-        ] = f"{self.detector_params.prefix}_{self.ispyb_params.run_number}_master.h5"
+        params["file_template"] = f"{self.detector_params.prefix}master.h5"
 
         return self.mx_acquisition.upsert_data_collection(list(params.values()))
 
