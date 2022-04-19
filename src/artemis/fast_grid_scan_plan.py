@@ -35,7 +35,7 @@ config_ophyd_logging(file="/tmp/ophyd.log", level="DEBUG")
 def run_gridscan(
     fgs: FastGridScan, zebra: Zebra, eiger: EigerDetector, parameters: FullParameters
 ):
-    ispyb = StoreInIspyb("config", parameters)
+    ispyb = StoreInIspyb("/dls_sw/dasc/mariadb/credentials/ispyb.cfg", parameters)
     _, datacollection_id, datacollection_group_id = ispyb.store_grid_scan()
     run_start(datacollection_id)
     # TODO: Check topup gate
