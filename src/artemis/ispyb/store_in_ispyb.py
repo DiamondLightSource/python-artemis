@@ -68,10 +68,11 @@ class StoreInIspyb:
         params["dyInMm"] = self.full_params.grid_scan_params.y_step_size
         params["stepsX"] = self.full_params.grid_scan_params.x_steps
         params["stepsY"] = self.full_params.grid_scan_params.y_steps
-        params["pixelsPerMicronX"] = self.ispyb_params.pixels_per_micron_x
-        params["pixelsPerMicronY"] = self.ispyb_params.pixels_per_micron_y
+        params["pixelsPerMicronX"] = float(self.ispyb_params.pixels_per_micron_x)
+        params["pixelsPerMicronY"] = float(self.ispyb_params.pixels_per_micron_y)
         upper_left = self.ispyb_params.upper_left
-        params["snapshotOffsetXPixel"], params["snapshotOffsetYPixel"] = upper_left
+        params["snapshotOffsetXPixel"] = float(upper_left[0])
+        params["snapshotOffsetYPixel"] = float(upper_left[1])
         params["orientation"] = Orientation.HORIZONTAL.value
         params["snaked"] = True
 
@@ -85,20 +86,24 @@ class StoreInIspyb:
         params["parentid"] = data_collection_group_id
         params["sampleid"] = self.ispyb_params.sample_id
         params["detectorid"] = I03_EIGER_DETECTOR
-        params["axis_start"] = self.detector_params.omega_start
-        params["axis_end"] = self.detector_params.omega_start
+        params["axis_start"] = float(self.detector_params.omega_start)
+        params["axis_end"] = float(self.detector_params.omega_start)
         params["axis_range"] = 0
-        params["focal_spot_size_at_samplex"] = self.ispyb_params.focal_spot_size_x
-        params["focal_spot_size_at_sampley"] = self.ispyb_params.focal_spot_size_y
-        params["slitgap_vertical"] = self.ispyb_params.slit_gap_size_y
-        params["slitgap_horizontal"] = self.ispyb_params.slit_gap_size_x
-        params["beamsize_at_samplex"] = self.ispyb_params.beam_size_x
-        params["beamsize_at_sampley"] = self.ispyb_params.beam_size_y
-        params["transmission"] = self.ispyb_params.transmission
+        params["focal_spot_size_at_samplex"] = float(
+            self.ispyb_params.focal_spot_size_x
+        )
+        params["focal_spot_size_at_sampley"] = float(
+            self.ispyb_params.focal_spot_size_y
+        )
+        params["slitgap_vertical"] = float(self.ispyb_params.slit_gap_size_y)
+        params["slitgap_horizontal"] = float(self.ispyb_params.slit_gap_size_x)
+        params["beamsize_at_samplex"] = float(self.ispyb_params.beam_size_x)
+        params["beamsize_at_sampley"] = float(self.ispyb_params.beam_size_y)
+        params["transmission"] = float(self.ispyb_params.transmission)
         params["comments"] = "Artemis: " + self.ispyb_params.comment
         params["datacollection_number"] = self.ispyb_params.run_number
-        params["detector_distance"] = self.detector_params.detector_distance
-        params["exp_time"] = self.detector_params.exposure_time
+        params["detector_distance"] = float(self.detector_params.detector_distance)
+        params["exp_time"] = float(self.detector_params.exposure_time)
         params["imgdir"] = self.detector_params.directory
         params["imgprefix"] = self.detector_params.prefix.split("_")[0]
         params["imgsuffix"] = EIGER_FILE_SUFFIX
@@ -108,20 +113,21 @@ class StoreInIspyb:
         params["n_passes"] = 1
         params["overlap"] = 0
 
-        params["flux"] = self.ispyb_params.flux
-        params["omegastart"] = self.detector_params.omega_start
+        params["flux"] = float(self.ispyb_params.flux)
+        params["omegastart"] = float(self.detector_params.omega_start)
         params["start_image_number"] = 1
-        params["resolution"] = self.ispyb_params.resolution
-        params["wavelength"] = self.ispyb_params.wavelength
+        params["resolution"] = float(self.ispyb_params.resolution)
+        params["wavelength"] = float(self.ispyb_params.wavelength)
         beam_position = self.detector_params.get_beam_position_mm(
             self.detector_params.detector_distance
         )
-        params["xbeam"], params["ybeam"] = beam_position
+        params["xbeam"] = float(beam_position[0])
+        params["ybeam"] = float(beam_position[1])
         params["xtal_snapshot1"], params["xtal_snapshot2"], params["xtal_snapshot3"] = [
-            self.ispyb_params.xtal_snapshots
+            self.ispyb_params.xtal_snapshots[0]
         ] * 3
         params["synchrotron_mode"] = self.ispyb_params.synchrotron_mode
-        params["undulator_gap1"] = self.ispyb_params.undulator_gap
+        params["undulator_gap1"] = float(self.ispyb_params.undulator_gap)
         params["starttime"] = self.get_current_time_string()
 
         # temporary file template until nxs filewriting is integrated and we can use that file name
