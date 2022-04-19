@@ -104,7 +104,7 @@ class StoreInIspyb:
         params["datacollection_number"] = self.ispyb_params.run_number
         params["detector_distance"] = float(self.detector_params.detector_distance)
         params["exp_time"] = float(self.detector_params.exposure_time)
-        params["imgdir"] = self.detector_params.directory
+        params["imgdir"] = self.detector_params.directory + "/"
         params["imgprefix"] = self.detector_params.prefix.split("_")[0]
         params["imgsuffix"] = EIGER_FILE_SUFFIX
         params["n_images"] = self.detector_params.num_images
