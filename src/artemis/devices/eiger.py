@@ -25,7 +25,9 @@ class EigerDetector(Device):
 
     STALE_PARAMS_TIMEOUT = 60
 
-    def __init__(self, detector_params: DetectorParams, name="Eiger Detector", *args, **kwargs):
+    def __init__(
+        self, detector_params: DetectorParams, name="Eiger Detector", *args, **kwargs
+    ):
         super().__init__(name=name, *args, **kwargs)
         self.detector_params = detector_params
         self.check_detector_variables_set()
@@ -55,8 +57,6 @@ class EigerDetector(Device):
         status_ok, error_message = self.odin.check_odin_initialised()
         if not status_ok:
             raise Exception(f"Odin not initialised: {error_message}")
-        if self.detector_params.use_roi_mode:
-            self.enable_roi_mode()
         self.set_detector_threshold(self.detector_params.current_energy)
         self.set_cam_pvs()
         self.set_odin_pvs()
@@ -68,7 +68,6 @@ class EigerDetector(Device):
         self.odin.file_writer.timeout.put(1)
         self.odin.nodes.wait_for_filewriters_to_finish()
         self.disarm_detector()
-        self.disable_roi_mode()
         status_ok = self.odin.check_odin_state()
         return status_ok
 
