@@ -104,3 +104,7 @@ class DetectorParams:
     @property
     def full_filename(self):
         return f"{self.prefix}_{self.run_number}"
+
+    @property
+    def full_filename_3d(self):
+        return f"{self.prefix}_{self.run_number + 1}"

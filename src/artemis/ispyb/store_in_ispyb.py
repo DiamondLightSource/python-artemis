@@ -35,12 +35,17 @@ class StoreInIspyb:
             data_collection_id = self._store_data_collection_table(
                 data_collection_group_id
             )
+            data_collection_id_3d = self._store_data_collection_table_3d(
+                data_collection_group_id
+            )
 
-            self._store_position_table(data_collection_id)
+
+            #self._store_position_table(data_collection_id)
 
             grid_id = self._store_grid_info_table(data_collection_id)
+            grid_id_3d = self._store_grid_info_table(data_collection_id_3d)
 
-            return grid_id, data_collection_id, data_collection_group_id
+            return grid_id, data_collection_id, data_collection_group_id, data_collection_id_3d, grid_id_3d
 
     def update_grid_scan_with_end_time_and_status(
         self,
@@ -118,15 +123,74 @@ class StoreInIspyb:
             self.detector_params.detector_distance
         )
         params["xbeam"], params["ybeam"] = beam_position
-        params["xtal_snapshot1"], params["xtal_snapshot2"], params["xtal_snapshot3"] = [
-            self.ispyb_params.xtal_snapshots
-        ] * 3
+        params["xtal_snapshot1"], params["xtal_snapshot2"], params["xtal_snapshot3"] = self.ispyb_params.xtal_snapshots
         params["synchrotron_mode"] = self.ispyb_params.synchrotron_mode
         params["undulator_gap1"] = self.ispyb_params.undulator_gap
         params["starttime"] = self.get_current_time_string()
 
         # temporary file template until nxs filewriting is integrated and we can use that file name
         params["file_template"] = f"{self.detector_params.full_filename}_master.h5"
+
+        print("/n/nJust before storage")
+        for key, value in params.items():
+            print(f"{key}: {value}, {type(value)}")
+        print("/n/n")
+
+        return self.mx_acquisition.upsert_data_collection(list(params.values()))
+
+    def _store_data_collection_table_3d(self, data_collection_group_id: int) -> int:
+        session_id = self.core.retrieve_visit_id(self.get_visit_string())
+
+        params = self.mx_acquisition.get_data_collection_params()
+        params["visitid"] = session_id
+        params["parentid"] = data_collection_group_id
+        if self.ispyb_params.sample_id != 0:
+            params["sampleid"] = self.ispyb_params.sample_id
+        params["detectorid"] = I03_EIGER_DETECTOR
+        params["axis_start"] = self.detector_params.omega_start - 90
+        params["axis_end"] = self.detector_params.omega_start - 90
+        params["axis_range"] = 0
+        params["focal_spot_size_at_samplex"] = self.ispyb_params.focal_spot_size_x
+        params["focal_spot_size_at_sampley"] = self.ispyb_params.focal_spot_size_y
+        params["slitgap_vertical"] = self.ispyb_params.slit_gap_size_y
+        params["slitgap_horizontal"] = self.ispyb_params.slit_gap_size_x
+        params["beamsize_at_samplex"] = self.ispyb_params.beam_size_x
+        params["beamsize_at_sampley"] = self.ispyb_params.beam_size_y
+        params["transmission"] = self.ispyb_params.transmission
+        params["comments"] = "Artemis: " + self.ispyb_params.comment
+        params["datacollection_number"] = self.detector_params.run_number + 1
+        params["detector_distance"] = self.detector_params.detector_distance
+        params["exp_time"] = self.detector_params.exposure_time
+        params["imgdir"] = self.detector_params.directory
+        params["imgprefix"] = self.detector_params.prefix
+        params["imgsuffix"] = EIGER_FILE_SUFFIX
+        params["n_images"] = self.detector_params.num_images
+
+        # Both overlap and n_passes included for backwards compatibility, planned to be removed later
+        params["n_passes"] = 1
+        params["overlap"] = 0
+
+        params["flux"] = self.ispyb_params.flux
+        params["omegastart"] = self.detector_params.omega_start - 90
+        params["start_image_number"] = 1
+        params["resolution"] = self.ispyb_params.resolution
+        params["wavelength"] = self.ispyb_params.wavelength
+        beam_position = self.detector_params.get_beam_position_mm(
+            self.detector_params.detector_distance
+        )
+        params["xbeam"], params["ybeam"] = beam_position
+        params["xtal_snapshot1"], params["xtal_snapshot2"], params["xtal_snapshot3"] = self.ispyb_params.xtal_snapshots
+        params["synchrotron_mode"] = self.ispyb_params.synchrotron_mode
+        params["undulator_gap1"] = self.ispyb_params.undulator_gap
+        params["starttime"] = self.get_current_time_string()
+
+        # temporary file template until nxs filewriting is integrated and we can use that file name
+        params["file_template"] = f"{self.detector_params.full_filename_3d}_master.h5"
+
+        print("/n/nJust before storage")
+        for key, value in params.items():
+            print(f"{key}: {value}, {type(value)}")
+        print("/n/n")
 
         return self.mx_acquisition.upsert_data_collection(list(params.values()))
 
@@ -147,7 +211,7 @@ class StoreInIspyb:
 
         params = self.mx_acquisition.get_data_collection_group_params()
         params["parentid"] = session_id
-        params["experimenttype"] = "mesh"
+        params["experimenttype"] = "Mesh3D"
         if self.ispyb_params.sample_id != 0:
             params["sampleid"] = self.ispyb_params.sample_id
             params["sample_barcode"] = self.ispyb_params.sample_barcode

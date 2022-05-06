@@ -63,7 +63,8 @@ class BlueskyRunner:
         self.RE = RE
 
     def start(self, parameters: FullParameters) -> StatusAndMessage:
-        logger.info(f"Started with parameters: {parameters}")
+        print(f"Started with parameters: {parameters}")
+        print(f"slit gap size_y {type(parameters.ispyb_params.slit_gap_size_y)}")
         if (
             self.current_status.status == Status.BUSY.value
             or self.current_status.status == Status.ABORTING.value
@@ -128,6 +129,7 @@ class FastGridScan(Resource):
         status_and_message = StatusAndMessage(Status.FAILED, f"{action} not understood")
         if action == Actions.START.value:
             try:
+                print(f"JSON request {request.data}")
                 parameters = FullParameters.from_json(request.data)
                 status_and_message = self.runner.start(parameters)
             except JSONDecodeError as exception:

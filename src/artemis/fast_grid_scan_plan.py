@@ -36,10 +36,11 @@ def run_gridscan(
     fgs: FastGridScan, zebra: Zebra, eiger: EigerDetector, parameters: FullParameters
 ):
     ispyb = StoreInIspyb(
-        "/dls_sw/dasc/mariadb/credentials/ispyb-artemis-i03.cfg", parameters
+        "/dls_sw/dasc/mariadb/credentials/ispyb.cfg", parameters
     )
-    _, datacollection_id, datacollection_group_id = ispyb.store_grid_scan()
+    _, datacollection_id, datacollection_group_id, datacollection_id_3d, _ = ispyb.store_grid_scan()
     run_start(datacollection_id)
+    run_start(datacollection_id_3d)
     # TODO: Check topup gate
     yield from set_fast_grid_scan_params(fgs, parameters.grid_scan_params)
 
@@ -58,7 +59,15 @@ def run_gridscan(
         datacollection_id,
         datacollection_group_id,
     )
+
+    ispyb.update_grid_scan_with_end_time_and_status(
+        current_time,
+        "DataCollection Successful",
+        datacollection_id_3d,
+        datacollection_group_id,
+    )
     run_end(datacollection_id)
+    run_end(datacollection_id_3d)
 
 
 def get_plan(parameters: FullParameters):
