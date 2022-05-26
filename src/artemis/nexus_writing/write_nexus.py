@@ -158,14 +158,14 @@ def create_scan_spec(grid_scan_params: GridScanParams) -> Spec:
         "sam_y",
         grid_scan_params.y_axis.start,
         grid_scan_params.y_axis.end,
-        grid_scan_params.y_axis.start
+        grid_scan_params.y_axis.full_steps
         + 1,  # 1 more as we take an image on the first step as well as the last
     )
     x_line = Line(
         "sam_x",
         grid_scan_params.x_axis.start,
         grid_scan_params.x_axis.end,
-        grid_scan_params.x_axis.start + 1,
+        grid_scan_params.x_axis.full_steps + 1,
     )
     return y_line * ~x_line
 
@@ -194,7 +194,7 @@ class NexusWriter:
         max_images_per_file = 1000
         return [
             self.directory / f"{self.filename}_{h5_num:06}.h5"
-            for h5_num in range(1, (self.num_of_images // max_images_per_file) + 2)
+            for h5_num in range(1, (self.num_of_images_per_grid // max_images_per_file) + 2)
         ]
 
     def __enter__(self):

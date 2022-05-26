@@ -41,8 +41,8 @@ def run_gridscan(
     sample_motors: GridScanMotorBundle,
     parameters: FullParameters,
 ):
-    config = "config"
-    if parameters.grid_scan_params.is_3d_grid_scan():
+    config = "/dls_sw/dasc/mariadb/credentials/ispyb-artemis-i03.cfg"
+    if parameters.grid_scan_params.is_3d_grid_scan:
         ispyb = StoreInIspyb3D(config)
     else:
         ispyb = StoreInIspyb2D(config)
@@ -74,10 +74,17 @@ def run_gridscan(
     for id in datacollection_ids:
         run_end(id)
 
-    xray_centre = wait_for_result(datacollection_id)
+    xray_centre = wait_for_result(datacollection_group_id)
     xray_centre_motor_position = (
         parameters.grid_scan_params.grid_position_to_motor_position(xray_centre)
     )
+    
+    print(f"Moving to {xray_centre_motor_position}")
+    yield from bps.mv(sample_motors.omega,
+                      parameters.detector_params.omega_start)
+    
+    yield from bps.wait(sample_motors)
+    
     yield from bps.mv(
         sample_motors.x,
         xray_centre_motor_position.x,

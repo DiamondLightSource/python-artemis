@@ -64,6 +64,7 @@ class BlueskyRunner:
 
     def start(self, parameters: FullParameters) -> StatusAndMessage:
         logger.info(f"Started with parameters: {parameters}")
+        print(f"Started with parameters: {parameters}")
         if (
             self.current_status.status == Status.BUSY.value
             or self.current_status.status == Status.ABORTING.value
