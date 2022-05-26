@@ -134,8 +134,8 @@ class EigerDetector(Device):
 
     def set_num_triggers_and_captures(self):
         self.cam.num_images.put(1)
-        self.cam.num_triggers.put(self.detector_params.num_images)
-        self.odin.file_writer.num_capture.put(self.detector_params.num_images)
+        self.cam.num_triggers.put(self.detector_params.num_images * 2)
+        self.odin.file_writer.num_capture.put(self.detector_params.num_images * 2)
 
     def wait_for_stale_parameters(self):
         await_value(self.stale_params, 0).wait(self.STALE_PARAMS_TIMEOUT)
