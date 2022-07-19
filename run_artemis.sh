@@ -132,7 +132,7 @@ if [[ $DEPLOY == 1 ]]; then
 fi
 
 if [[ $START == 1 ]]; then
-    COMMAND_STRING="source ${ARTEMIS_PATH}/start_artemis.sh ${ARTEMIS_PATH} ${BEAMLINE}"
+    COMMAND_STRING="source ${ARTEMIS_PATH}/start_artemis.sh ${BEAMLINE}"
     echo "running ${COMMAND_STRING} on control machine"
 
     if [[ $HOSTNAME != "${BEAMLINE}-control@diamond.ac.uk" || $USERNAME != "gda2" ]]; then
